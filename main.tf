@@ -36,11 +36,13 @@ module "apps" {
 }
 
 output "tunnels" {
-    value = { 
-        for k, v in module.apps : k => { 
-            "tunnel_id": v.tunnel_id,
-            "tunnel_secret": v.tunnel_secret
-        }
+  value = {
+    for k, v in module.apps : k => {
+      "account_id" : var.cloudflare_account_id,
+      "tunnel_name" : k,
+      "tunnel_id" : v.tunnel_id,
+      "tunnel_secret" : v.tunnel_secret
     }
-    sensitive = true
+  }
+  sensitive = true
 }

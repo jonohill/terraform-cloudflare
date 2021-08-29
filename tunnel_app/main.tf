@@ -39,6 +39,7 @@ resource "cloudflare_record" "record" {
   zone_id = local.zone_id
   name    = var.name
   type    = "CNAME"
+  proxied = true
   value   = "${resource.cloudflare_argo_tunnel.tunnel.id}.cfargotunnel.com"
 }
 
@@ -47,4 +48,16 @@ resource "cloudflare_access_application" "app" {
   name    = var.name
   domain  = "${var.name}.${var.zone_name}"
   type    = "self_hosted"
+}
+
+resource "cloudflare_access_policy" "policy" {
+  application_id = resource.cloudflare_access_application.app.id
+  zone_id        = local.zone_id
+  name           = "me"
+  precedence     = 1
+  decision       = "allow"
+
+  include {
+    group = [var.access_group]
+  }
 }

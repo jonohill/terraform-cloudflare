@@ -5,5 +5,11 @@ variable "cloudflare_access_emails" {
   type = list(string)
 }
 variable "app_names" {
-  type = list(string)
+  type        = list(string)
+  description = "Secure apps (using Cloudflare access)"
+}
+
+variable "tunnel_names" {
+  type        = list(string)
+  description = "Tunnels (without Cloudflare access)"
 }

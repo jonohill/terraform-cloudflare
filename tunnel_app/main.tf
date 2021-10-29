@@ -44,6 +44,8 @@ resource "cloudflare_record" "record" {
 }
 
 resource "cloudflare_access_application" "app" {
+  count = min(1, length(var.access_group))
+
   zone_id = local.zone_id
   name    = var.name
   domain  = "${var.name}.${var.zone_name}"
@@ -51,7 +53,9 @@ resource "cloudflare_access_application" "app" {
 }
 
 resource "cloudflare_access_policy" "policy" {
-  application_id = resource.cloudflare_access_application.app.id
+  count = min(1, length(var.access_group))
+
+  application_id = resource.cloudflare_access_application.app[count.index].id
   zone_id        = local.zone_id
   name           = "me"
   precedence     = 1

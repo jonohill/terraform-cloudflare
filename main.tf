@@ -35,9 +35,19 @@ module "apps" {
   access_group = resource.cloudflare_access_group.me.id
 }
 
+module "tunnels" {
+  source     = "./tunnel_app"
+  account_id = var.cloudflare_account_id
+  zone_name  = var.cloudflare_zone
+
+  for_each = toset(var.tunnel_names)
+
+  name = each.key
+}
+
 output "tunnels" {
   value = {
-    for k, v in module.apps : k => {
+    for k, v in merge(module.apps, module.tunnels) : k => {
       "account_id" : var.cloudflare_account_id,
       "tunnel_name" : k,
       "tunnel_id" : v.tunnel_id,

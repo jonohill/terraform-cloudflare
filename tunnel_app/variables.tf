@@ -4,4 +4,6 @@ variable "name" {}
 
 variable "zone_name" {}
 
-variable "access_group" {}
+variable "access_group" {
+  default = ""
+}
